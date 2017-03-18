@@ -16,7 +16,7 @@
 @property NSArray *toolbarItems;
 @property NSArray *toolbarItemTypes;
 @property NSArray *toolbarItemUrlRegexes;
-@property LEANWebViewController *wvc;
+@property (weak, nonatomic) LEANWebViewController *wvc;
 @property LEANToolbarVisibility visibility;
 @end
 
@@ -60,10 +60,10 @@
             NSArray *itemRegexes = [LEANUtilities createRegexArrayFromStrings:urlRegex];
             if ([system isKindOfClass:[NSString class]] && [system isEqualToString:@"back"]) {
                 if (iconImage) {
-                    item = [[UIBarButtonItem alloc] initWithImage:iconImage style:UIBarButtonItemStyleBordered target:self action:@selector(backPressed:)];
+                    item = [[UIBarButtonItem alloc] initWithImage:iconImage style:UIBarButtonItemStylePlain target:self action:@selector(backPressed:)];
                 } else {
                     if (!title) title = @"Back";
-                    item = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:self action:@selector(backPressed:)];
+                    item = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStylePlain target:self action:@selector(backPressed:)];
                 }
                 
                 item.enabled = NO;
@@ -71,6 +71,10 @@
             }
             
             if (item && itemType) {
+                // we should not have to set this, but inheriting the tint color seems
+                // to not work when using the dark theme, i.e. UIBarStyleBlack
+                item.tintColor = [GoNativeAppConfig sharedAppConfig].tintColor;
+                
                 // add item
                 if ([toolbarItems count] > 0) {
                     // add spacer

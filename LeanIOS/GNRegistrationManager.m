@@ -9,20 +9,19 @@
 #import "GNRegistrationManager.h"
 #import "LEANUtilities.h"
 #import "LEANInstallation.h"
+#import "GoNativeAppConfig.h"
 
 #pragma mark Registration Data
 
 typedef NS_OPTIONS(NSUInteger, RegistrationData) {
     RegistrationDataInstallation = 1 << 0,
-    RegistrationDataPush = 1 << 1,
-    RegistrationDataParse = 1 << 2,
-    RegistrationDataOneSignal = 1 << 3
+    RegistrationDataOneSignal = 1 << 1,
+    RegistrationDataCustom = 1 << 2
 };
 
 @interface GNRegistrationInfo : NSObject
-@property NSData *pushRegistrationToken;
-@property NSString *parseInstallationId;
 @property NSString *oneSignalUserId;
+@property NSDictionary *customData;
 @end
 @implementation GNRegistrationInfo
 @end
@@ -31,8 +30,12 @@ typedef NS_OPTIONS(NSUInteger, RegistrationData) {
 
 @interface GNRegistrationEndpoint : NSObject
 @property NSURL *postUrl;
+@property NSString *postUrlString;
 @property NSArray *urlRegexes;
 @property RegistrationData dataTypes;
+// WKWebView cookies are not shared with native url request functions, so if we are using
+// WK, use a hidden webview to do POSTs.
+@property WKWebView *wkWebView;
 @end
 
 @implementation GNRegistrationEndpoint
@@ -41,8 +44,18 @@ typedef NS_OPTIONS(NSUInteger, RegistrationData) {
     self = [super init];
     if (self) {
         self.postUrl = postUrl;
+        self.postUrlString = [self.postUrl absoluteString];
         self.urlRegexes = urlRegexes;
         self.dataTypes = dataTypes;
+        
+        if ([GoNativeAppConfig sharedAppConfig].useWKWebView) {
+            WKWebViewConfiguration *config = [[NSClassFromString(@"WKWebViewConfiguration") alloc] init];
+            config.processPool = [LEANUtilities wkProcessPool];
+            self.wkWebView = [[NSClassFromString(@"WKWebView") alloc] initWithFrame:CGRectZero configuration:config];
+            
+            // load url to get around same-origin policy
+            [self.wkWebView loadHTMLString:@"" baseURL:self.postUrl];
+        }
     }
     return self;
 }
@@ -54,16 +67,14 @@ typedef NS_OPTIONS(NSUInteger, RegistrationData) {
         [toSend addEntriesFromDictionary:[LEANInstallation info]];
     }
     
-    if (self.dataTypes & RegistrationDataPush && info.pushRegistrationToken) {
-        toSend[@"deviceToken"] = [info.pushRegistrationToken base64EncodedStringWithOptions:0];
-    }
-    
-    if (self.dataTypes & RegistrationDataParse && info.parseInstallationId) {
-        toSend[@"parseInstallationId"] = info.parseInstallationId;
-    }
-    
     if (self.dataTypes & RegistrationDataOneSignal && info.oneSignalUserId) {
         toSend[@"oneSignalUserId"] = info.oneSignalUserId;
+    }
+    
+    if (self.dataTypes & RegistrationDataCustom && info.customData) {
+        for (NSString *key in info.customData) {
+            toSend[[NSString stringWithFormat:@"customData_%@", key]] = info.customData[key];
+        }
     }
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:toSend options:0 error:nil];
@@ -74,6 +85,17 @@ typedef NS_OPTIONS(NSUInteger, RegistrationData) {
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [request setHTTPBody:jsonData];
+    
+    // if using WkWebView, send POST via WkWebView.
+    if (self.wkWebView) {
+        NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        NSString *js = [NSString stringWithFormat:@"var xhr = new XMLHttpRequest(); xhr.open('POST', %@, true); xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8'); xhr.send(%@);",
+                        [LEANUtilities jsWrapString:self.postUrlString],
+                        [LEANUtilities jsWrapString:jsonString]];
+        [self.wkWebView evaluateJavaScript:js completionHandler:nil];
+        
+        return;
+    }
     
     NSURLSession *session = [NSURLSession sharedSession];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -102,6 +124,7 @@ typedef NS_OPTIONS(NSUInteger, RegistrationData) {
 @property RegistrationData allDataTypes;
 
 @property GNRegistrationInfo *registrationInfo;
+@property NSURL *lastUrl;
 @end
 
 @implementation GNRegistrationManager
@@ -132,16 +155,10 @@ typedef NS_OPTIONS(NSUInteger, RegistrationData) {
 -(RegistrationData)registrationDataTypeFromString:(NSString*)string
 {
     if ([string caseInsensitiveCompare:@"installation"] == NSOrderedSame) {
-        return RegistrationDataInstallation;
-    }
-    else if ([string caseInsensitiveCompare:@"push"] == NSOrderedSame) {
-        return RegistrationDataPush | RegistrationDataInstallation;
-    }
-    else if ([string caseInsensitiveCompare:@"parse"] == NSOrderedSame) {
-        return RegistrationDataParse | RegistrationDataInstallation;
+        return RegistrationDataInstallation | RegistrationDataCustom;
     }
     else if ([string caseInsensitiveCompare:@"onesignal"] == NSOrderedSame) {
-        return RegistrationDataOneSignal | RegistrationDataInstallation;
+        return RegistrationDataOneSignal | RegistrationDataInstallation | RegistrationDataCustom;
     }
     
     return 0;
@@ -193,22 +210,19 @@ typedef NS_OPTIONS(NSUInteger, RegistrationData) {
     if (!self.allDataTypes & type) return;
     
     for (GNRegistrationEndpoint *endpoint in self.registrationEndpoints) {
-        if (endpoint.dataTypes & type) {
+        if (!(endpoint.dataTypes & type)) continue;
+        
+        if (self.lastUrl && [LEANUtilities string:[self.lastUrl absoluteString] matchesAnyRegex:endpoint.urlRegexes]) {
             [endpoint sendRegistrationInfo:self.registrationInfo];
         }
     }
 }
 
--(void)setPushRegistrationToken:(NSData*)token
+-(void)sendToAllEndpoints
 {
-    self.registrationInfo.pushRegistrationToken = token;
-    [self registrationDataChanged:RegistrationDataPush];
-}
-
--(void)setParseInstallationId:(NSString*)installationId
-{
-    self.registrationInfo.parseInstallationId = installationId;
-    [self registrationDataChanged:RegistrationDataParse];
+    for (GNRegistrationEndpoint *endpoint in self.registrationEndpoints) {
+        [endpoint sendRegistrationInfo:self.registrationInfo];
+    }
 }
 
 -(void)setOneSignalUserId:(NSString *)userId
@@ -217,18 +231,23 @@ typedef NS_OPTIONS(NSUInteger, RegistrationData) {
     [self registrationDataChanged:RegistrationDataOneSignal];
 }
 
--(void)checkUrl:(NSURL *)url
+-(void)setCustomData:(NSDictionary *)data
 {
-    for (GNRegistrationEndpoint *endpoint in self.registrationEndpoints) {
-        if ([LEANUtilities string:[url absoluteString] matchesAnyRegex:endpoint.urlRegexes]) {
-            [endpoint sendRegistrationInfo:self.registrationInfo];
-        }
-    }
+    self.registrationInfo.customData = data;
+    [self registrationDataChanged:RegistrationDataCustom];
 }
 
--(BOOL)pushEnabled
+-(void)checkUrl:(NSURL *)url
 {
-    return self.allDataTypes & RegistrationDataPush;
+    self.lastUrl = url;
+    for (GNRegistrationEndpoint *endpoint in self.registrationEndpoints) {
+        if ([LEANUtilities string:[url absoluteString] matchesAnyRegex:endpoint.urlRegexes]) {
+            // send after delay. Cookies may not have synced if we send immediately.
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [endpoint sendRegistrationInfo:self.registrationInfo];
+            });
+        }
+    }
 }
 
 @end

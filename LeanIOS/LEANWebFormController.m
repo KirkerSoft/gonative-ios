@@ -14,7 +14,6 @@
 #import "NSURL+LEANUtilities.h"
 #import "GoNativeAppConfig.h"
 #import "LEANLoginManager.h"
-#import "LEANPushManager.h"
 #import <WebKit/WebKit.h>
 
 static NSString *kGenericErrorMessage = @"Problem with form submission. Please check your inputs and try again";
@@ -420,8 +419,8 @@ static NSString *kGenericErrorMessage = @"Problem with form submission. Please c
                     }
                     else if ([field[@"type"] isEqualToString:@"date"]) {
                         UIDatePicker *datePicker = (UIDatePicker*)[cell viewWithTag:2];
-                        NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-                        NSDateComponents *components = [calendar components:NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit fromDate:datePicker.date];
+                        NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+                        NSDateComponents *components = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth |  NSCalendarUnitDay fromDate:datePicker.date];
                         [self runJavascriptSync: [NSString stringWithFormat: @"jQuery(%@).val(%ld);", [LEANUtilities jsWrapString:field[@"yearSelector"]], (long)components.year]];
                         [self runJavascriptSync: [NSString stringWithFormat: @"jQuery(%@).val(%ld);", [LEANUtilities jsWrapString:field[@"monthSelector"]], (long)components.month]];
                         [self runJavascriptSync: [NSString stringWithFormat: @"jQuery(%@).val(%ld);", [LEANUtilities jsWrapString:field[@"daySelector"]], (long)components.day]];
@@ -1026,8 +1025,6 @@ static NSString *kGenericErrorMessage = @"Problem with form submission. Please c
     
     if (success) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [LEANPushManager sharedManager].userID = self.tempUserID;
-            
             [self.checkSubmissionTimer invalidate];
             self.checkSubmissionTimer = nil;
             [self.hiddenWebView stopLoading];

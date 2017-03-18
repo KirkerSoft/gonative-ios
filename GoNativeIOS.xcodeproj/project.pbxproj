@@ -44,7 +44,6 @@
 		201AB2D61996AD66008C31BF /* LEANInstallation.m in Sources */ = {isa = PBXBuildFile; fileRef = 201AB2D51996AD66008C31BF /* LEANInstallation.m */; };
 		202B4D5219510F640099821E /* TextAreaView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 202B4D5119510F640099821E /* TextAreaView.xib */; };
 		202B4D56195122FD0099821E /* DateCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 202B4D55195122FD0099821E /* DateCellView.xib */; };
-		202BE56F1B9756E80064D928 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 202BE56E1B9756E80064D928 /* Parse.framework */; };
 		202BE5711B9757070064D928 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 202BE5701B9757070064D928 /* AudioToolbox.framework */; };
 		202BE5731B97570D0064D928 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 202BE5721B97570D0064D928 /* CFNetwork.framework */; };
 		202BE5751B97571B0064D928 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 202BE5741B97571B0064D928 /* CoreLocation.framework */; };
@@ -55,15 +54,13 @@
 		202BE57F1B9757450064D928 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 202BE57E1B9757450064D928 /* libsqlite3.dylib */; };
 		202BE5811B97574E0064D928 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 202BE5801B97574E0064D928 /* Accounts.framework */; };
 		202BE5831B9757530064D928 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 202BE5821B9757530064D928 /* Social.framework */; };
-		202BE5851B9757AD0064D928 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 202BE5841B9757AD0064D928 /* Bolts.framework */; };
 		202E989519EF30C8009C28AD /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 202E989419EF30C8009C28AD /* Reachability.m */; };
 		203ADBAA1C224F0300273067 /* GonativeIO.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 203ADBA91C224F0300273067 /* GonativeIO.entitlements */; };
+		2041A8C61E36D75F0010BAC4 /* OneSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2041A8C51E36D75F0010BAC4 /* OneSignal.framework */; };
 		2046CAFA1BC0790800714F66 /* GNRegistrationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2046CAF91BC0790800714F66 /* GNRegistrationManager.m */; };
 		204AE86318D4D60D009AF272 /* NSURL+LEANUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 204AE86218D4D60D009AF272 /* NSURL+LEANUtilities.m */; };
 		204D783F18F9A4F7005DD37E /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 204D783E18F9A4F7005DD37E /* GTMNSString+HTML.m */; };
-		20504CF51B9E62EF00D1E5D7 /* LEANIdentityService.m in Sources */ = {isa = PBXBuildFile; fileRef = 20504CF41B9E62EF00D1E5D7 /* LEANIdentityService.m */; };
 		205141F51C3F54D40087DEB2 /* libGoNativeIOSLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 205141F41C3F54D40087DEB2 /* libGoNativeIOSLibrary.a */; };
-		2056509E1C6D7D7800F0B663 /* OneSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2056509D1C6D7D7800F0B663 /* OneSignal.framework */; };
 		205650A21C6ED77400F0B663 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2056509F1C6ED77400F0B663 /* FBSDKCoreKit.framework */; };
 		205650A31C6ED77400F0B663 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 205650A01C6ED77400F0B663 /* FBSDKLoginKit.framework */; };
 		205650A41C6ED77400F0B663 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 205650A11C6ED77400F0B663 /* FBSDKShareKit.framework */; };
@@ -76,6 +73,7 @@
 		207170CB18C3A376002EBDD0 /* ListCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 207170CA18C3A376002EBDD0 /* ListCellView.xib */; };
 		2089662718AC6753007FC34F /* LEANLoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089662618AC6753007FC34F /* LEANLoginManager.m */; };
 		208A9F42191AEBAD0049E664 /* appConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 208A9F41191AEBAD0049E664 /* appConfig.json */; };
+		209A7D101D347714005A89C6 /* GoNativeAuthUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209A7D0F1D347714005A89C6 /* GoNativeAuthUrl.swift */; };
 		209B3219193FA36F0052A7C6 /* LEANUrlCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 209B3218193FA36F0052A7C6 /* LEANUrlCache.m */; };
 		209B321D193FB11A0052A7C6 /* localCache.zip in Resources */ = {isa = PBXBuildFile; fileRef = 209B321C193FB11A0052A7C6 /* localCache.zip */; };
 		209B3309193FC5570052A7C6 /* libzipzap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 209B3307193FC4CE0052A7C6 /* libzipzap.a */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -94,12 +92,13 @@
 		20A525EE1A7D94EE00936DC5 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 20A525ED1A7D94EE00936DC5 /* Settings.bundle */; };
 		20A7FF05197F6DDE006FDF44 /* LEANConfigUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 20A7FF04197F6DDE006FDF44 /* LEANConfigUpdater.m */; };
 		20B6B55519AC4C2E004019C4 /* LEANDocumentSharer.m in Sources */ = {isa = PBXBuildFile; fileRef = 20B6B55419AC4C2E004019C4 /* LEANDocumentSharer.m */; };
+		20C62B7D1D2708B7001D1646 /* GoNativeKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C62B7C1D2708B7001D1646 /* GoNativeKeychain.swift */; };
+		20C748BE1DF0C4DE002930FD /* GNInAppPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = 20C748BD1DF0C4DE002930FD /* GNInAppPurchase.m */; };
 		20C8505019CD143100DB208A /* LEANIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = 20C8504F19CD143100DB208A /* LEANIcons.m */; };
 		20D77B701A2547E5008A938D /* LEANActionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D77B6F1A2547E5008A938D /* LEANActionManager.m */; };
 		20D7B68319A6BF0100993236 /* LEANSimulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D7B68219A6BF0100993236 /* LEANSimulator.m */; };
 		20DE148018F103850083F46A /* ForgotPasswordView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 20DE147F18F103850083F46A /* ForgotPasswordView.xib */; };
 		20E49F8219A2C30C00B9343E /* LEANWebViewPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 20E49F8119A2C30C00B9343E /* LEANWebViewPool.m */; };
-		20EA5523194FE7900039735B /* LEANPushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 20EA5522194FE7900039735B /* LEANPushManager.m */; };
 		20F38BAE1B0D5AC700E90B4D /* LEANToolbarManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F38BAD1B0D5AC700E90B4D /* LEANToolbarManager.m */; };
 		20F49C2319C7BE8200B46C5A /* GoogleCast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20F49C2219C7BE8200B46C5A /* GoogleCast.framework */; };
 		20F49C2519C7BE8900B46C5A /* MediaAccessibility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20F49C2419C7BE8900B46C5A /* MediaAccessibility.framework */; };
@@ -176,7 +175,6 @@
 		201AB2D51996AD66008C31BF /* LEANInstallation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LEANInstallation.m; sourceTree = "<group>"; };
 		202B4D5119510F640099821E /* TextAreaView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextAreaView.xib; sourceTree = "<group>"; };
 		202B4D55195122FD0099821E /* DateCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DateCellView.xib; sourceTree = "<group>"; };
-		202BE56E1B9756E80064D928 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		202BE5701B9757070064D928 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		202BE5721B97570D0064D928 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		202BE5741B97571B0064D928 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -187,21 +185,18 @@
 		202BE57E1B9757450064D928 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		202BE5801B97574E0064D928 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		202BE5821B9757530064D928 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
-		202BE5841B9757AD0064D928 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		202E989319EF30C8009C28AD /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		202E989419EF30C8009C28AD /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		203ADBA91C224F0300273067 /* GonativeIO.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = GonativeIO.entitlements; path = ../GonativeIO.entitlements; sourceTree = "<group>"; };
+		2041A8C51E36D75F0010BAC4 /* OneSignal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OneSignal.framework; sourceTree = "<group>"; };
 		2046CAF81BC0790800714F66 /* GNRegistrationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GNRegistrationManager.h; sourceTree = "<group>"; };
 		2046CAF91BC0790800714F66 /* GNRegistrationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GNRegistrationManager.m; sourceTree = "<group>"; };
 		204AE86118D4D60D009AF272 /* NSURL+LEANUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+LEANUtilities.h"; sourceTree = "<group>"; };
 		204AE86218D4D60D009AF272 /* NSURL+LEANUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+LEANUtilities.m"; sourceTree = "<group>"; };
 		204D783D18F9A4F7005DD37E /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
 		204D783E18F9A4F7005DD37E /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
-		20504CF31B9E62EF00D1E5D7 /* LEANIdentityService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LEANIdentityService.h; sourceTree = "<group>"; };
-		20504CF41B9E62EF00D1E5D7 /* LEANIdentityService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LEANIdentityService.m; sourceTree = "<group>"; };
 		205141F31C3F54C00087DEB2 /* GoNativeAppConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoNativeAppConfig.h; sourceTree = "<group>"; };
 		205141F41C3F54D40087DEB2 /* libGoNativeIOSLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoNativeIOSLibrary.a; sourceTree = "<group>"; };
-		2056509D1C6D7D7800F0B663 /* OneSignal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OneSignal.framework; sourceTree = "<group>"; };
 		2056509F1C6ED77400F0B663 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		205650A01C6ED77400F0B663 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		205650A11C6ED77400F0B663 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
@@ -217,6 +212,7 @@
 		2089662518AC6753007FC34F /* LEANLoginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LEANLoginManager.h; sourceTree = "<group>"; };
 		2089662618AC6753007FC34F /* LEANLoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LEANLoginManager.m; sourceTree = "<group>"; };
 		208A9F41191AEBAD0049E664 /* appConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = appConfig.json; sourceTree = "<group>"; };
+		209A7D0F1D347714005A89C6 /* GoNativeAuthUrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoNativeAuthUrl.swift; sourceTree = "<group>"; };
 		209B3217193FA36F0052A7C6 /* LEANUrlCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LEANUrlCache.h; sourceTree = "<group>"; };
 		209B3218193FA36F0052A7C6 /* LEANUrlCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LEANUrlCache.m; sourceTree = "<group>"; };
 		209B321C193FB11A0052A7C6 /* localCache.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = localCache.zip; sourceTree = "<group>"; };
@@ -247,6 +243,10 @@
 		20A7FF04197F6DDE006FDF44 /* LEANConfigUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LEANConfigUpdater.m; sourceTree = "<group>"; };
 		20B6B55319AC4C2E004019C4 /* LEANDocumentSharer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LEANDocumentSharer.h; sourceTree = "<group>"; };
 		20B6B55419AC4C2E004019C4 /* LEANDocumentSharer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LEANDocumentSharer.m; sourceTree = "<group>"; };
+		20C62B7B1D2708B7001D1646 /* GonativeIO-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GonativeIO-Bridging-Header.h"; sourceTree = "<group>"; };
+		20C62B7C1D2708B7001D1646 /* GoNativeKeychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoNativeKeychain.swift; sourceTree = "<group>"; };
+		20C748BC1DF0C4DE002930FD /* GNInAppPurchase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GNInAppPurchase.h; sourceTree = "<group>"; };
+		20C748BD1DF0C4DE002930FD /* GNInAppPurchase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GNInAppPurchase.m; sourceTree = "<group>"; };
 		20C8504E19CD143100DB208A /* LEANIcons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LEANIcons.h; sourceTree = "<group>"; };
 		20C8504F19CD143100DB208A /* LEANIcons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LEANIcons.m; sourceTree = "<group>"; };
 		20D77B6E1A2547E5008A938D /* LEANActionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LEANActionManager.h; sourceTree = "<group>"; };
@@ -256,8 +256,6 @@
 		20DE147F18F103850083F46A /* ForgotPasswordView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ForgotPasswordView.xib; sourceTree = "<group>"; };
 		20E49F8019A2C30C00B9343E /* LEANWebViewPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LEANWebViewPool.h; sourceTree = "<group>"; };
 		20E49F8119A2C30C00B9343E /* LEANWebViewPool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LEANWebViewPool.m; sourceTree = "<group>"; };
-		20EA5521194FE7900039735B /* LEANPushManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LEANPushManager.h; sourceTree = "<group>"; };
-		20EA5522194FE7900039735B /* LEANPushManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LEANPushManager.m; sourceTree = "<group>"; };
 		20F38BAC1B0D5AC700E90B4D /* LEANToolbarManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LEANToolbarManager.h; sourceTree = "<group>"; };
 		20F38BAD1B0D5AC700E90B4D /* LEANToolbarManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LEANToolbarManager.m; sourceTree = "<group>"; };
 		20F49C2219C7BE8200B46C5A /* GoogleCast.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleCast.framework; sourceTree = "<group>"; };
@@ -272,7 +270,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2056509E1C6D7D7800F0B663 /* OneSignal.framework in Frameworks */,
 				202BE5831B9757530064D928 /* Social.framework in Frameworks */,
 				202BE5811B97574E0064D928 /* Accounts.framework in Frameworks */,
 				202BE57F1B9757450064D928 /* libsqlite3.dylib in Frameworks */,
@@ -281,7 +278,6 @@
 				202BE57B1B9757310064D928 /* StoreKit.framework in Frameworks */,
 				202BE5791B97572C0064D928 /* Security.framework in Frameworks */,
 				205650A31C6ED77400F0B663 /* FBSDKLoginKit.framework in Frameworks */,
-				202BE5851B9757AD0064D928 /* Bolts.framework in Frameworks */,
 				202BE5771B9757240064D928 /* QuartzCore.framework in Frameworks */,
 				202BE5751B97571B0064D928 /* CoreLocation.framework in Frameworks */,
 				202BE5731B97570D0064D928 /* CFNetwork.framework in Frameworks */,
@@ -291,13 +287,13 @@
 				20F49C2719C7BE9100B46C5A /* CoreText.framework in Frameworks */,
 				20F49C2519C7BE8900B46C5A /* MediaAccessibility.framework in Frameworks */,
 				20F49C2319C7BE8200B46C5A /* GoogleCast.framework in Frameworks */,
-				202BE56F1B9756E80064D928 /* Parse.framework in Frameworks */,
 				209B330B193FC5BD0052A7C6 /* libz.dylib in Frameworks */,
 				209B3309193FC5570052A7C6 /* libzipzap.a in Frameworks */,
 				205141F51C3F54D40087DEB2 /* libGoNativeIOSLibrary.a in Frameworks */,
 				2002B49E18A9991300495B3D /* CoreGraphics.framework in Frameworks */,
 				2002B4A018A9991300495B3D /* UIKit.framework in Frameworks */,
 				2002B49C18A9991300495B3D /* Foundation.framework in Frameworks */,
+				2041A8C61E36D75F0010BAC4 /* OneSignal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,10 +333,10 @@
 		2002B49A18A9991300495B3D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2041A8C51E36D75F0010BAC4 /* OneSignal.framework */,
 				2056509F1C6ED77400F0B663 /* FBSDKCoreKit.framework */,
 				205650A01C6ED77400F0B663 /* FBSDKLoginKit.framework */,
 				205650A11C6ED77400F0B663 /* FBSDKShareKit.framework */,
-				2056509D1C6D7D7800F0B663 /* OneSignal.framework */,
 				202BE5821B9757530064D928 /* Social.framework */,
 				202BE5801B97574E0064D928 /* Accounts.framework */,
 				202BE57E1B9757450064D928 /* libsqlite3.dylib */,
@@ -357,8 +353,6 @@
 				20F49C2219C7BE8200B46C5A /* GoogleCast.framework */,
 				205EF30219BF84AF002AE261 /* WebKit.framework */,
 				209B330A193FC5BD0052A7C6 /* libz.dylib */,
-				202BE5841B9757AD0064D928 /* Bolts.framework */,
-				202BE56E1B9756E80064D928 /* Parse.framework */,
 				2002B49B18A9991300495B3D /* Foundation.framework */,
 				2002B49D18A9991300495B3D /* CoreGraphics.framework */,
 				2002B49F18A9991300495B3D /* UIKit.framework */,
@@ -385,6 +379,8 @@
 				2002B51118AB091C00495B3D /* jquery-2.1.0.min.js */,
 				2046CAF81BC0790800714F66 /* GNRegistrationManager.h */,
 				2046CAF91BC0790800714F66 /* GNRegistrationManager.m */,
+				20C748BC1DF0C4DE002930FD /* GNInAppPurchase.h */,
+				20C748BD1DF0C4DE002930FD /* GNInAppPurchase.m */,
 				2002B4AA18A9991300495B3D /* LEANAppDelegate.h */,
 				2002B4AB18A9991300495B3D /* LEANAppDelegate.m */,
 				20054BD418B68D1E00A422F9 /* LEANCastController.h */,
@@ -397,16 +393,12 @@
 				20B6B55419AC4C2E004019C4 /* LEANDocumentSharer.m */,
 				20C8504E19CD143100DB208A /* LEANIcons.h */,
 				20C8504F19CD143100DB208A /* LEANIcons.m */,
-				20504CF31B9E62EF00D1E5D7 /* LEANIdentityService.h */,
-				20504CF41B9E62EF00D1E5D7 /* LEANIdentityService.m */,
 				201AB2D41996AD66008C31BF /* LEANInstallation.h */,
 				201AB2D51996AD66008C31BF /* LEANInstallation.m */,
 				2089662518AC6753007FC34F /* LEANLoginManager.h */,
 				2089662618AC6753007FC34F /* LEANLoginManager.m */,
 				2002B4F218A99C4100495B3D /* LEANNavigationController.h */,
 				2002B4F318A99C4100495B3D /* LEANNavigationController.m */,
-				20EA5521194FE7900039735B /* LEANPushManager.h */,
-				20EA5522194FE7900039735B /* LEANPushManager.m */,
 				2002B4F418A99C4100495B3D /* LEANRootViewController.h */,
 				2002B4F518A99C4100495B3D /* LEANRootViewController.m */,
 				20191C4219231A0900BF1549 /* LEANSettingsController.h */,
@@ -431,6 +423,8 @@
 				2004AF7A18F8F936001E01E9 /* LEANWebViewIntercept.m */,
 				20E49F8019A2C30C00B9343E /* LEANWebViewPool.h */,
 				20E49F8119A2C30C00B9343E /* LEANWebViewPool.m */,
+				20C62B7C1D2708B7001D1646 /* GoNativeKeychain.swift */,
+				209A7D0F1D347714005A89C6 /* GoNativeAuthUrl.swift */,
 				204AE86118D4D60D009AF272 /* NSURL+LEANUtilities.h */,
 				204AE86218D4D60D009AF272 /* NSURL+LEANUtilities.m */,
 				202E989319EF30C8009C28AD /* Reachability.h */,
@@ -439,6 +433,7 @@
 				2002B4AD18A9991300495B3D /* Main.storyboard */,
 				2002B4D818A99A9900495B3D /* REFrostedViewController */,
 				2002B4A218A9991300495B3D /* Supporting Files */,
+				20C62B7B1D2708B7001D1646 /* GonativeIO-Bridging-Header.h */,
 			);
 			path = LeanIOS;
 			sourceTree = "<group>";
@@ -632,9 +627,19 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = LEAN;
-				LastUpgradeCheck = 0700;
+				LastSwiftUpdateCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "GoNative.io LLC";
 				TargetAttributes = {
+					2002B49718A9991300495B3D = {
+						LastSwiftMigration = 0810;
+						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
+					};
 					2002B4BB18A9991300495B3D = {
 						TestTargetID = 2002B49718A9991300495B3D;
 					};
@@ -729,18 +734,19 @@
 				20B6B55519AC4C2E004019C4 /* LEANDocumentSharer.m in Sources */,
 				20A13AB11905CB6C00B997DD /* FAImageView.m in Sources */,
 				20A7FF05197F6DDE006FDF44 /* LEANConfigUpdater.m in Sources */,
-				20504CF51B9E62EF00D1E5D7 /* LEANIdentityService.m in Sources */,
 				20A13A9619058A5600B997DD /* LEANCustomAction.m in Sources */,
 				2002B4FB18A99C4100495B3D /* LEANRootViewController.m in Sources */,
+				20C62B7D1D2708B7001D1646 /* GoNativeKeychain.swift in Sources */,
 				20C8505019CD143100DB208A /* LEANIcons.m in Sources */,
 				2002B4E518A99A9900495B3D /* RECommonFunctions.m in Sources */,
 				201AB2D61996AD66008C31BF /* LEANInstallation.m in Sources */,
 				2002B4AC18A9991300495B3D /* LEANAppDelegate.m in Sources */,
+				209A7D101D347714005A89C6 /* GoNativeAuthUrl.swift in Sources */,
 				20191C471923DF6400BF1549 /* LEANProfilePicker.m in Sources */,
 				204AE86318D4D60D009AF272 /* NSURL+LEANUtilities.m in Sources */,
 				20A13AB31905CB6C00B997DD /* NSString+FontAwesome.m in Sources */,
 				2002B4A818A9991300495B3D /* main.m in Sources */,
-				20EA5523194FE7900039735B /* LEANPushManager.m in Sources */,
+				20C748BE1DF0C4DE002930FD /* GNInAppPurchase.m in Sources */,
 				2002B4E718A99A9900495B3D /* REFrostedViewController.m in Sources */,
 				2018EE951907671A00EC4311 /* LEANUrlInspector.m in Sources */,
 				20D7B68319A6BF0100993236 /* LEANSimulator.m in Sources */,
@@ -811,14 +817,19 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -836,7 +847,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"lib/include/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -857,13 +868,18 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -875,8 +891,9 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"lib/include/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "arm64 armv7 armv7s i386";
@@ -888,8 +905,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = GonativeIO.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -899,7 +919,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LeanIOS/GoNativeIOS-Prefix.pch";
 				INFOPLIST_FILE = "LeanIOS/GoNativeIOS-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/lib",
@@ -910,6 +931,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.gonative.ios.dev;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "LeanIOS/GonativeIO-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
 				WRAPPER_EXTENSION = app;
@@ -921,8 +945,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = GonativeIO.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -932,7 +959,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LeanIOS/GoNativeIOS-Prefix.pch";
 				INFOPLIST_FILE = "LeanIOS/GoNativeIOS-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/lib",
@@ -943,6 +971,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.gonative.ios.dev;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "LeanIOS/GonativeIO-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
 				WRAPPER_EXTENSION = app;

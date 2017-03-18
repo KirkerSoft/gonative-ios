@@ -75,6 +75,26 @@
     return urlWithQuerystring;
 }
 
++(NSDictionary*)parseQuaryParamsWithUrl:(NSURL*)url
+{
+    NSString *query = url.query;
+    if (!query) return @{};
+    
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+
+    NSArray * queryComponents = [query componentsSeparatedByString:@"&"];
+    for (NSString *keyValue in queryComponents) {
+        NSArray *pairComponents = [keyValue componentsSeparatedByString:@"="];
+        if (pairComponents.count != 2) continue;
+        
+        NSString *key = [[pairComponents firstObject] stringByRemovingPercentEncoding];
+        NSString *value = [[pairComponents lastObject] stringByRemovingPercentEncoding];
+        result[key] = value;
+    }
+    
+    return result;
+}
+
 +(BOOL)isValidEmail:(NSString*)email
 {
     NSString *emailRegex = @"\\S+@\\S+\\.\\S+";
@@ -415,6 +435,78 @@
     }
     
     return NO;
+}
+
++(NSString*)createJsForPostTo:(NSString*)url data:(NSDictionary*)data
+{
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data options:0 error:nil];
+    if (!jsonData) {
+        return nil;
+    }
+    
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+
+    
+    NSString *template = @"function gonative_post(url, jsonString) { "
+    "    try { "
+    "        var params = JSON.parse(jsonString); "
+    " "
+    "        var form = document.createElement('form'); "
+    "        form.setAttribute('method', 'post'); "
+    "        form.setAttribute('action', url); "
+    " "
+    "        for (var key in params) { "
+    "            if (params.hasOwnProperty(key)) { "
+    "                var hiddenField = document.createElement('input'); "
+    "                hiddenField.setAttribute('type', 'hidden'); "
+    "                hiddenField.setAttribute('name', key); "
+    "                hiddenField.setAttribute('value', params[key]); "
+    " "
+    "                form.appendChild(hiddenField); "
+    "            } "
+    "        } "
+    " "
+    "        form.submit(); "
+    "    } catch (ignored) { "
+    " "
+    "    } "
+    "} "
+    "gonative_post(%@, %@)";
+    
+    return [NSString stringWithFormat:template, [self jsWrapString:url], [self jsWrapString:jsonString]];
+
+    return @"";
+}
+
+
++(NSString*)createJsForCallback:(NSString*)functionName data:(NSDictionary*)data
+{
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data options:0 error:nil];
+    if (!jsonData) {
+        return nil;
+    }
+    
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    
+    NSString *template = @"function gonative_do_callback(functionName, jsonString) { "
+    "    if (typeof window[functionName] !== 'function') return; "
+    " "
+    "    try { "
+    "        var data = JSON.parse(jsonString); "
+    "        var callbackFunction = window[functionName]; "
+    "        callbackFunction(data); "
+    "    } catch (ignored) { "
+    " "
+    "    } "
+    "} "
+    " "
+    "gonative_do_callback(%@, %@);";
+
+    
+    return [NSString stringWithFormat:template, [self jsWrapString:functionName], [self jsWrapString:jsonString]];
+    
+    return @"";
 }
 
 @end

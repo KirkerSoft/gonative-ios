@@ -19,6 +19,7 @@ static NSString *kLEANWebViewControllerClearPools = @"io.gonative.ios.WebViewCon
 @property BOOL checkLoginSignup;
 @property LEANTabManager *tabManager;
 @property NSURL *initialUrl;
+@property UIView *initialWebview;
 
 - (IBAction) showMenu;
 - (void) loadUrlString:(NSString*)url;
@@ -31,7 +32,7 @@ static NSString *kLEANWebViewControllerClearPools = @"io.gonative.ios.WebViewCon
 - (void) hideTabBarAnimated:(BOOL)animated;
 - (void) showToolbarAnimated:(BOOL)animated;
 - (void) hideToolbarAnimated:(BOOL)animated;
-- (void) sharePage;
+- (void) sharePage:(id)sender;
 - (BOOL) canGoBack;
 - (void) goBack;
 @end

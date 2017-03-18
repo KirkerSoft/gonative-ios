@@ -9,6 +9,8 @@
 #import <WebKit/WebKit.h>
 #import <MessageUI/MessageUI.h>
 
+#import <OneSignal/OneSignal.h>
+
 #import "LEANWebViewController.h"
 #import "LEANAppDelegate.h"
 #import "LEANUtilities.h"
@@ -28,8 +30,9 @@
 #import "LEANDocumentSharer.h"
 #import "Reachability.h"
 #import "LEANActionManager.h"
-#import "LEANIdentityService.h"
 #import "GNRegistrationManager.h"
+#import "GNInAppPurchase.h"
+#import "GonativeIO-swift.h"
 
 @interface LEANWebViewController () <UISearchBarDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UITabBarDelegate, WKNavigationDelegate, WKUIDelegate, MFMailComposeViewControllerDelegate>
 
@@ -133,7 +136,7 @@
     
     // add nav button
     if (appConfig.showNavigationMenu &&  [self isRootWebView]) {
-        self.navButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"navImage"] style:UIBarButtonItemStyleBordered target:self action:@selector(showMenu)];
+        self.navButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"navImage"] style:UIBarButtonItemStylePlain target:self action:@selector(showMenu)];
         // hack to space it a bit closer to the left edge
         UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
         [negativeSpacer setWidth:-10];
@@ -169,28 +172,38 @@
     
     self.visitedLoginOrSignup = NO;
     
-    // switch to wkwebview if on ios8
-    if (appConfig.useWKWebView) {
-        WKWebViewConfiguration *config = [[NSClassFromString(@"WKWebViewConfiguration") alloc] init];
-        config.processPool = [LEANUtilities wkProcessPool];
-        WKWebView *wv = [[NSClassFromString(@"WKWebView") alloc] initWithFrame:self.webview.frame configuration:config];
-        [LEANUtilities configureWebView:wv];
-        [self switchToWebView:wv showImmediately:NO];
+    if (self.initialWebview) {
+        [self switchToWebView:self.initialWebview showImmediately:YES];
+        self.initialWebview = nil;
+        
+        // nav title image
+        [self checkNavigationTitleImageForUrl:self.wkWebview.URL];
+        
     } else {
-        // set self as webview delegate to handle start/end load events
-        self.webview.delegate = self;
-        [LEANUtilities configureWebView:self.webview];
+        // switch to wkwebview if on ios8
+        if (appConfig.useWKWebView) {
+            WKWebViewConfiguration *config = [[NSClassFromString(@"WKWebViewConfiguration") alloc] init];
+            config.processPool = [LEANUtilities wkProcessPool];
+            WKWebView *wv = [[NSClassFromString(@"WKWebView") alloc] initWithFrame:self.webview.frame configuration:config];
+            [LEANUtilities configureWebView:wv];
+            [self switchToWebView:wv showImmediately:NO];
+        } else {
+            // set self as webview delegate to handle start/end load events
+            self.webview.delegate = self;
+            [LEANUtilities configureWebView:self.webview];
+        }
+        
+        // load initial url
+        self.urlLevel = -1;
+        if (!self.initialUrl) {
+            self.initialUrl = appConfig.initialURL;
+        }
+        [self loadUrl:self.initialUrl];
+        
+        // nav title image
+        [self checkNavigationTitleImageForUrl:self.initialUrl];
+
     }
-    
-    // load initial url
-    self.urlLevel = -1;
-    if (!self.initialUrl) {
-        self.initialUrl = appConfig.initialURL;
-    }
-    [self loadUrl:self.initialUrl];
-    
-    // nav title image
-    [self checkNavigationTitleImageForUrl:self.initialUrl];
     
     // hidden nav bar
     if (!appConfig.showNavigationBar && [self isRootWebView]) {
@@ -321,7 +334,7 @@
     
     if ([self isRootWebView]) {
         [self.navigationController setNavigationBarHidden:![GoNativeAppConfig sharedAppConfig].showNavigationBar animated:YES];
-    } else {
+    } else if ([GoNativeAppConfig sharedAppConfig].showNavigationBarWithNavigationLevels) {
         [self.navigationController setNavigationBarHidden:NO animated:YES];
     }
     
@@ -430,9 +443,7 @@
         [self.tabManager autoSelectTabForUrl:url];
         
         GoNativeAppConfig *appConfig = [GoNativeAppConfig sharedAppConfig];
-        if (appConfig.sidebarEnabledRegex) {
-            [self setSidebarEnabled:[appConfig.sidebarEnabledRegex evaluateWithObject:[url absoluteString]]];
-        }
+        [self setSidebarEnabled:[appConfig shouldShowSidebarForUrl:[url absoluteString]]];
     });
 }
 
@@ -573,7 +584,7 @@
             
         case 3:
             //action
-            [self sharePage];
+            [self sharePage:sender];
             break;
             
         case 4:
@@ -649,13 +660,25 @@
     [self.navigationItem setRightBarButtonItems:buttons animated:animated];
 }
 
-- (void) sharePage
+- (void) sharePage:(id)sender
 {
     UIActivityViewController * avc = [[UIActivityViewController alloc]
                                       initWithActivityItems:@[[self.currentRequest URL]] applicationActivities:nil];
     // The activity view inherits tint color, but always has a light background, making the buttons
     // impossible to read if we have light tint color. Force the tint to be the ios default.
     [avc.view setTintColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+    
+    // For iPads starting in iOS 8, we need to specify where the pop over should occur from.
+    if ( [avc respondsToSelector:@selector(popoverPresentationController)] ) {
+        if ([sender isKindOfClass:[UIBarButtonItem class]]) {
+            avc.popoverPresentationController.barButtonItem = sender;
+        } else if ([sender isKindOfClass:[UIView class]]) {
+            avc.popoverPresentationController.sourceView = sender;
+        } else {
+            avc.popoverPresentationController.sourceView = self.view;
+        }
+    }
+    
     [self presentViewController:avc animated:YES completion:nil];
 }
 
@@ -910,6 +933,13 @@
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
+    // is target="_blank" and we are allowing window open? Always accept, skipping logic. This makes
+    // target="_blank" behave like window.open
+    if (navigationAction.targetFrame == nil && [GoNativeAppConfig sharedAppConfig].enableWindowOpen) {
+        decisionHandler(WKNavigationActionPolicyAllow);
+        return;
+    }
+    
     BOOL isUserAction = navigationAction.navigationType == WKNavigationTypeLinkActivated || navigationAction.navigationType == WKNavigationTypeFormSubmitted;
     BOOL shouldLoad = [self shouldLoadRequest:navigationAction.request isMainFrame:navigationAction.targetFrame.isMainFrame isUserAction:isUserAction];
     if (shouldLoad) decisionHandler(WKNavigationActionPolicyAllow);
@@ -968,6 +998,77 @@
             }
         }
         
+        return NO;
+    }
+    
+    // touchid authentication
+    if ([@"gonative" isEqualToString:url.scheme] && [@"auth" isEqualToString:url.host]) {
+        GoNativeAuthUrl *authUrl = [[GoNativeAuthUrl alloc] init];
+        authUrl.currentUrl = self.currentRequest.URL;
+        [authUrl handleUrl:url callback:^(NSString * _Nullable postUrl, NSDictionary<NSString *,id> * _Nullable postData, NSString * _Nullable callbackFunction) {
+            
+            if (callbackFunction) {
+                NSString *jsCallback = [LEANUtilities createJsForCallback:callbackFunction data:postData];
+                if (jsCallback) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self runJavascript:jsCallback];
+                    });
+                }
+            }
+            
+            if (postUrl) {
+                NSString *jsPost = [LEANUtilities createJsForPostTo:postUrl data:postData];
+                if (jsPost) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self runJavascript:jsPost];
+                    });
+                }
+
+            }
+        }];
+        
+        return NO;
+    }
+    
+    // registration info
+    if ([@"gonative" isEqualToString:url.scheme] && [@"registration" isEqualToString:url.host]
+        && [@"/send" isEqualToString:url.path]) {
+        
+        NSDictionary *query = [LEANUtilities parseQuaryParamsWithUrl:url];
+        NSString *customDataString = query[@"customData"];
+        if (customDataString) {
+            NSDictionary *customData = [NSJSONSerialization JSONObjectWithData:[customDataString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+            if ([customData isKindOfClass:[NSDictionary class]]) {
+                [[GNRegistrationManager sharedManager] setCustomData:customData];
+                [[GNRegistrationManager sharedManager] sendToAllEndpoints];
+            } else {
+                NSLog(@"Gonative registration error: customData is not JSON object");
+            }
+        } else {
+            [[GNRegistrationManager sharedManager] sendToAllEndpoints];
+        }
+        
+        return NO;
+    }
+    
+    // In-app purchases
+    if ([@"gonative" isEqualToString:url.scheme] && [@"purchase" isEqualToString:url.host]) {
+        NSArray *pathComponents = url.pathComponents;
+        if (pathComponents.count == 2) {
+            NSString *productId = pathComponents[1];
+            [[GNInAppPurchase sharedInstance] purchaseProduct:productId];
+        }
+        
+        return NO;
+    }
+    
+    // OneSignal registration
+    if ([@"gonative" isEqualToString:url.scheme] && [@"onesignal" isEqualToString:url.host]
+        && [@"/register" isEqualToString:url.path]) {
+        
+        if (appConfig.oneSignalEnabled) {
+            [OneSignal registerForPushNotifications];
+        }
         return NO;
     }
     
@@ -1424,33 +1525,21 @@
     
     if (oldView != newView) {
         newView.frame = oldView.frame;
-        [self.view insertSubview:newView aboveSubview:oldView];
+        
+        UIView *webviewContainer = [oldView superview];
+        [webviewContainer insertSubview:newView aboveSubview:oldView];
         [oldView removeFromSuperview];
+        
+        // add layout constriants to constainer view
+        [webviewContainer addConstraint:[NSLayoutConstraint constraintWithItem:newView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:webviewContainer attribute:NSLayoutAttributeTop multiplier:1 constant:0]];
+        [webviewContainer addConstraint:[NSLayoutConstraint constraintWithItem:newView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:webviewContainer attribute:NSLayoutAttributeBottom multiplier:1 constant:0]];
+        [webviewContainer addConstraint:[NSLayoutConstraint constraintWithItem:newView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:webviewContainer attribute:NSLayoutAttributeLeft multiplier:1 constant:0]];
+        [webviewContainer addConstraint:[NSLayoutConstraint constraintWithItem:newView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:webviewContainer attribute:NSLayoutAttributeRight multiplier:1 constant:0]];
+
     }
     [self adjustInsets];
     // re-scroll after adjusting insets
     [scrollView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
-    
-    // Add layout constraints
-    // The top, left, and right are straightforward.
-    // For the bottom, by default we align to the bottom layout guide. However, if a toolbar and/or
-    // tab bar are shown, we want the bottom to be pushed up by them. So make the bottom layout guide
-    // have a lower priority, then add constraints to the tab bar and toolbar with "great than or equal"
-    // relationships.
-    // top layout guide
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:newView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.topLayoutGuide attribute:NSLayoutAttributeBottom multiplier:1 constant:0]];
-    // left (leading)
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:newView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeading multiplier:1 constant:0]];
-    // right (trailing)
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:newView attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTrailing multiplier:1 constant:0]];
-    // bottom layout guide (750 priority)
-    NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:newView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.bottomLayoutGuide attribute:NSLayoutAttributeTop multiplier:1 constant:0];
-    constraint.priority = UILayoutPriorityDefaultHigh;
-    [self.view addConstraint:constraint];
-    // tab bar >=
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tabBar attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:newView attribute:NSLayoutAttributeBottom multiplier:1 constant:0]];
-    // toolbar >=
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.toolbar attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:newView attribute:NSLayoutAttributeBottom multiplier:1 constant:0]];
     
     if (self.postLoadJavascript) {
         [self runJavascript:self.postLoadJavascript];
@@ -1480,6 +1569,7 @@
             if (url) {
                 [self checkPreNavigationForUrl:url];
                 [self checkNavigationForUrl:url];
+                [[GNRegistrationManager sharedManager] checkUrl:url];
             }
         }
         if ([keyPath isEqualToString:@"canGoBack"]) {
@@ -1546,8 +1636,7 @@
         self.didLoadPage = YES;
         
         [[LEANUrlInspector sharedInspector] inspectUrl:url];
-        
-        
+                
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         [self setNavigationButtonStatus];
         
@@ -1647,12 +1736,23 @@
         }
         
         [self showNavigationItemButtonsAnimated:YES];
-        
-        // identity service
-        [[LEANIdentityService sharedService] checkUrl:url];
-        
+                
         // registration service
         [[GNRegistrationManager sharedManager] checkUrl:url];
+        
+        // IAP
+        if ([GoNativeAppConfig sharedAppConfig].iapEnabled) {
+            [[GNInAppPurchase sharedInstance] getInAppPurchaseInfoWithBlock:^(NSDictionary * iapInfo) {
+                NSDictionary *info = @{@"inAppPurchases": iapInfo};
+                
+                NSString *jsCallback = [LEANUtilities createJsForCallback:@"gonative_info_ready" data:info];
+                if (jsCallback) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self runJavascript:jsCallback];
+                    });
+                }
+            }];
+        }
         
         // save session cookies as persistent
         NSUInteger forceSessionCookieExpiry = [GoNativeAppConfig sharedAppConfig].forceSessionCookieExpiry;
@@ -1675,13 +1775,52 @@
 
 - (WKWebView*)webView:(WKWebView *)webView createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration forNavigationAction:(WKNavigationAction *)navigationAction windowFeatures:(WKWindowFeatures *)windowFeatures
 {
-    // This gets called when a link has target=blank.
-    // If we open an external link in a new webview, the app will be stuck on a blank page.
-    // Therefore, load in the same webview instead of creating a new webview.
+    if (![GoNativeAppConfig sharedAppConfig].enableWindowOpen) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self loadRequest:navigationAction.request];
+        });
+        return nil;
+    }
+    
+    WKWebView *newWebview = [[NSClassFromString(@"WKWebView") alloc] initWithFrame:self.webview.frame configuration:configuration];
+    [LEANUtilities configureWebView:newWebview];
+    
+    LEANWebViewController *newvc = [self.storyboard instantiateViewControllerWithIdentifier:@"webviewController"];
+    newvc.initialWebview = newWebview;
+    
+    NSMutableArray *controllers = [self.navigationController.viewControllers mutableCopy];
+    while (![[controllers lastObject] isKindOfClass:[LEANWebViewController class]]) {
+        [controllers removeLastObject];
+    }
+    [controllers addObject:newvc];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self loadRequest:navigationAction.request];
+        [self.navigationController setViewControllers:controllers animated:YES];
     });
-    return nil;
+
+    return newWebview;
+}
+
+-(void)webViewDidClose:(WKWebView *)webView
+{
+    if (webView != self.wkWebview) return;
+    
+    NSArray *vcs = self.navigationController.viewControllers;
+    LEANWebViewController *popTo = nil;
+    // find the top webviewcontroller that is not self
+    for (NSInteger i = vcs.count - 1; i >= 0; i--) {
+        if ([vcs[i] isKindOfClass:[LEANWebViewController class]] && vcs[i] != self) {
+            popTo = vcs[i];
+            break;
+        }
+    }
+    
+    if (popTo) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.navigationController popToViewController:popTo animated:YES];
+        });
+    } else {
+        [self loadUrl:[GoNativeAppConfig sharedAppConfig].initialURL];
+    }
 }
 
 - (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler
@@ -1691,7 +1830,35 @@
         completionHandler();
     }];
     [alert addAction:okAction];
-    [self presentViewController:alert animated:YES completion:nil];
+    
+    // There is a chance that a view controller is already being presented, e.g. if a drop-down box
+    // on iPad is open, and selecting an item triggers a javascript alert. That's why we don't just call
+    // [self presentViewController:]
+    [[self getTopPresentedViewController] presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL result))completionHandler
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:frame.request.URL.host message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        completionHandler(YES);
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        completionHandler(NO);
+    }];
+    [alert addAction:okAction];
+    [alert addAction:cancelAction];
+    
+    [[self getTopPresentedViewController] presentViewController:alert animated:YES completion:nil];
+
+}
+
+-(UIViewController*)getTopPresentedViewController {
+    UIViewController *vc = self;
+    while (vc.presentedViewController) {
+        vc = vc.presentedViewController;
+    }
+    return vc;
 }
 
 - (void)checkReadyStatus

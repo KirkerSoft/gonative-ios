@@ -20,6 +20,12 @@ typedef enum : NSUInteger {
     LEANToolbarVisibilityAnyItemEnabled
 } LEANToolbarVisibility;
 
+typedef enum : NSUInteger {
+    GoNativeScreenOrientationUnspecified,
+    GoNativeScreenOrientationPortrait,
+    GoNativeScreenOrientationLandscape
+} GoNativeScreenOrientation;
+
 @interface GoNativeAppConfig : NSObject
 
 // general
@@ -38,6 +44,9 @@ typedef enum : NSUInteger {
 @property NSArray *replaceStrings;
 @property BOOL disableConfigUpdater;
 @property BOOL disableEventRecorder;
+@property BOOL enableWindowOpen;
+@property GoNativeScreenOrientation forceScreenOrientation;
+@property BOOL keepScreenOn;
 
 // navigation
 @property NSMutableDictionary *menus;
@@ -45,7 +54,8 @@ typedef enum : NSUInteger {
 @property NSMutableArray *loginDetectRegexes;
 @property NSMutableArray *loginDetectLocations;
 @property BOOL showNavigationMenu;
-@property NSPredicate *sidebarEnabledRegex;
+@property NSMutableArray<NSPredicate*> *sidebarEnabledRegexes;
+@property NSMutableArray<NSNumber*> *sidebarIsEnabled;
 @property NSMutableArray *navStructureLevels;
 @property NSMutableArray *navTitles;
 @property NSMutableArray *regexInternalEternal;
@@ -78,6 +88,7 @@ typedef enum : NSUInteger {
 @property UIColor *titleTextColor;
 @property BOOL showToolbar;
 @property BOOL showNavigationBar;
+@property BOOL showNavigationBarWithNavigationLevels;
 @property NSMutableArray *navigationTitleImageRegexes;
 @property NSNumber *menuAnimationDuration;
 @property NSNumber *interactiveDelay;
@@ -101,21 +112,14 @@ typedef enum : NSUInteger {
 
 
 // services
-@property BOOL pushNotifications;
 @property BOOL analytics;
 @property NSInteger idsite_test;
 @property NSInteger idsite_prod;
 
-// parse integration
-@property BOOL parseEnabled;
-@property NSString *parseApplicationId;
-@property NSString *parseClientKey;
-@property BOOL parsePushEnabled;
-@property BOOL parseAnalyticsEnabled;
-
 // onesignal integration
 @property BOOL oneSignalEnabled;
 @property NSString *oneSignalAppId;
+@property BOOL oneSignalAutoRegister;
 
 // Facebook SDK
 @property BOOL facebookEnabled;
@@ -128,6 +132,14 @@ typedef enum : NSUInteger {
 
 // registration service
 @property NSArray *registrationEndpoints;
+
+// touch id
+@property NSArray *authAllowedUrls;
+
+// in-app purchase
+@property BOOL iapEnabled;
+@property NSURL *iapProductsUrl;
+@property NSURL *iapPostUrl;
 
 // misc
 @property NSPredicate *forceLandscapeMatch;
@@ -157,5 +169,6 @@ typedef enum : NSUInteger {
 
 - (BOOL)shouldShowNavigationTitleImageForUrl:(NSString*)url;
 -(NSString*)userAgentForUrl:(NSURL*)url;
+- (BOOL)shouldShowSidebarForUrl:(NSString*)url;
 
 @end

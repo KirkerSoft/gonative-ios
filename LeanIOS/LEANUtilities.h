@@ -14,6 +14,7 @@
 +(NSString*)urlEscapeString:(NSString *)unencodedString;
 +(NSString*)urlQueryStringWithDictionary:(NSDictionary*) dictionary;
 +(NSString*)addQueryStringToUrlString:(NSString *)urlString withDictionary:(NSDictionary *)dictionary;
++(NSDictionary*)parseQuaryParamsWithUrl:(NSURL*)url;
 +(BOOL)isValidEmail:(NSString*)email;
 +(NSString *)stripHTML:(NSString*)x replaceWith:(NSString*) replacement;
 + (UIColor *)colorFromHexString:(NSString *)hexString;
@@ -25,4 +26,6 @@
 + (WKProcessPool *)wkProcessPool;
 +(NSArray<NSPredicate*>*)createRegexArrayFromStrings:(id)input;
 +(BOOL)string:(NSString*)string matchesAnyRegex:(NSArray<NSPredicate*>*)regexes;
++(NSString*)createJsForPostTo:(NSString*)url data:(NSDictionary*)data;
++(NSString*)createJsForCallback:(NSString*)functionName data:(NSDictionary*)data;
 @end
